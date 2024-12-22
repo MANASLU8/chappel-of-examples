@@ -64,8 +64,8 @@ graph TD
 ```mermaid
 sequenceDiagram
     participant User as Пользователь
-    participant Admin as Администратор
     participant System as Система
+    participant Admin as Администратор
 
     User->>System: Запрос на авторизацию
     System-->>User: Результат авторизации
