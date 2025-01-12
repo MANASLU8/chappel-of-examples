@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tsung loglevel="notice" version="1.0">
+  <clients>
+    <client host="localhost" use_controller_vm="true" />
+  </clients>
+
+  <servers>
+    <server host="localhost" port="8080" type="tcp" />
+  </servers>
+
+  <load>
+    <duration unit="minute">10</duration>
+    <arrivalphase phase="1">
+      <duration unit="minute">10</duration>
+      <rate unit="second">10</rate>
+    </arrivalphase>
+  </load>
+
+  <sessions>
+    <session name="generate_and_send_messages" probability="100" type="ts_http">
+      <thinktime random="true" value="5" />
+      <request>
+        <http url="/controller/general/sendMessage" version="1.1" method="POST" content_type="application/json">
+          <contents>
+            <![CDATA[
+            [
+              <loop variable="device_id" incr="1" start="1" stop="100">
+                {
+                  "device": {
+                    "id": "<%device_id%>",
+                    "name": "Device <%device_id%>",
+                    "type": {
+                      "id": "<% random_string(36) %>",
+                      "name": "<% choose('phone', 'computer', 'laptop') %>"
+                    }
+                  },
+                  "message": "<% random_number(-10, 10) %>"
+                }
+              </loop>
+            ]
+            ]]>
+          </contents>
+        </http>
+      </request>
+    </session>
+  </sessions>
+</tsung>
